@@ -116,7 +116,8 @@ monday-workflow/
 ├── package.json
 ├── tsconfig.json
 ├── README.md
-├── TOKEN_SETUP_GUIDE.md           # 토큰 설정 상세 가이드
+├── MCP_CONNECTION_GUIDE.md        # MCP 연결 가이드 (권장)
+├── TOKEN_SETUP_GUIDE.md           # API 토큰 설정 상세 가이드
 ├── TEST_RESULTS.md                # 테스트 결과 리포트
 └── .env
 ```
@@ -212,18 +213,24 @@ const board = await workflow.createBoardStructure(boardConfig);
 
 ## Monday.com MCP 서버 사용
 
-이 프로젝트는 Monday.com REST API를 직접 호출하는 방식으로 구현되어 있습니다.
+이 프로젝트는 Monday.com GraphQL API를 직접 호출하는 방식으로 구현되어 있습니다.
 
-Monday.com MCP 서버를 Claude Desktop과 함께 사용하려면:
+### MCP vs Direct API
 
-1. Claude Desktop 실행
-2. Settings → Integrations 이동
-3. "Add custom integration" 클릭
-4. MCP 서버 URL 입력: `https://mcp.monday.com/sse`
-5. OAuth 인증 완료
-6. Claude Desktop에서 Monday.com 도구 사용 가능
+**MCP 서버 (권장 - Claude와 자연어 상호작용)**
+- Claude Code에서 자연어로 Monday.com 작업 수행
+- OAuth 자동 인증, 토큰 관리 불필요
+- 📖 [MCP 연결 가이드](./MCP_CONNECTION_GUIDE.md) 참고
 
-MCP 서버를 사용하면 Claude와 대화하면서 Monday.com을 제어할 수 있습니다.
+**Direct API (현재 구현 - 프로그래밍 방식 자동화)**
+- 복잡한 워크플로우 자동화
+- 스크립트 실행, CI/CD 통합
+- Personal API Token 필요 (올바른 권한)
+- 📖 [토큰 설정 가이드](./TOKEN_SETUP_GUIDE.md) 참고
+
+**상황에 따라 선택:**
+- 빠른 조회/확인 → MCP 사용
+- 복잡한 자동화 → Direct API 사용 (이 프로젝트)
 
 ## 참고 자료
 
