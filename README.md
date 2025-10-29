@@ -116,8 +116,9 @@ monday-workflow/
 ├── package.json
 ├── tsconfig.json
 ├── README.md
-├── MCP_CONNECTION_GUIDE.md        # MCP 연결 가이드 (권장)
+├── WEB_ENVIRONMENT_SOLUTION.md    # 🌐 웹 환경 솔루션 (시작!)
 ├── TOKEN_SETUP_GUIDE.md           # API 토큰 설정 상세 가이드
+├── MCP_CONNECTION_GUIDE.md        # MCP 연결 가이드 (데스크톱만)
 ├── TEST_RESULTS.md                # 테스트 결과 리포트
 └── .env
 ```
@@ -211,26 +212,29 @@ const board = await workflow.createBoardStructure(boardConfig);
 - `phone` - 전화번호
 - `link` - 링크
 
-## Monday.com MCP 서버 사용
+## Monday.com 연동 방식
 
 이 프로젝트는 Monday.com GraphQL API를 직접 호출하는 방식으로 구현되어 있습니다.
 
-### MCP vs Direct API
+### 🌐 claude.ai/code 웹 환경 (현재)
 
-**MCP 서버 (권장 - Claude와 자연어 상호작용)**
-- Claude Code에서 자연어로 Monday.com 작업 수행
-- OAuth 자동 인증, 토큰 관리 불필요
-- 📖 [MCP 연결 가이드](./MCP_CONNECTION_GUIDE.md) 참고
+웹 기반 Claude Code에서는 MCP 서버를 추가할 수 없으므로 **Direct API 사용**이 유일한 방법입니다.
 
-**Direct API (현재 구현 - 프로그래밍 방식 자동화)**
-- 복잡한 워크플로우 자동화
-- 스크립트 실행, CI/CD 통합
-- Personal API Token 필요 (올바른 권한)
-- 📖 [토큰 설정 가이드](./TOKEN_SETUP_GUIDE.md) 참고
+**필수 요구사항:**
+- ✅ 올바른 권한을 가진 Personal API Token
+- ✅ 필수 권한: `boards:read`, `boards:write`, `workspaces:read`
+- 📖 [웹 환경 솔루션 가이드](./WEB_ENVIRONMENT_SOLUTION.md) - **여기서 시작!**
+- 📖 [토큰 설정 가이드](./TOKEN_SETUP_GUIDE.md) - 상세 설명
 
-**상황에 따라 선택:**
-- 빠른 조회/확인 → MCP 사용
-- 복잡한 자동화 → Direct API 사용 (이 프로젝트)
+### 💻 Claude Code 데스크톱 앱
+
+데스크톱 앱을 사용하는 경우 MCP 연결 가능:
+- 📖 [MCP 연결 가이드](./MCP_CONNECTION_GUIDE.md)
+
+### 사용 전략
+
+**빠른 조회/확인:** `claude.ai` (일반 웹 UI) - MCP 연결됨
+**코드 작성/자동화:** `claude.ai/code` - Direct API 사용 (이 프로젝트)
 
 ## 참고 자료
 
