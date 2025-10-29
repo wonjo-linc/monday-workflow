@@ -12,7 +12,7 @@ async function testConnection() {
   console.log('Token (first 20 chars):', apiToken?.substring(0, 20) + '...');
   console.log('Token length:', apiToken?.length);
 
-  // Test 1: Simple me query
+  // Simple me query
   const meQuery = `
     query {
       me {
@@ -23,67 +23,81 @@ async function testConnection() {
     }
   `;
 
-  try {
-    console.log('\n--- Test 1: Me Query ---');
-    const response = await axios.post(
-      apiUrl,
-      { query: meQuery },
-      {
-        headers: {
-          'Authorization': apiToken,
-          'Content-Type': 'application/json'
-        }
+  const authMethods = [
+    {
+      name: 'Authorization header (token only)',
+      headers: {
+        'Authorization': apiToken,
+        'Content-Type': 'application/json'
       }
-    );
+    },
+    {
+      name: 'Authorization header (Bearer prefix)',
+      headers: {
+        'Authorization': `Bearer ${apiToken}`,
+        'Content-Type': 'application/json'
+      }
+    },
+    {
+      name: 'API-Token header',
+      headers: {
+        'API-Token': apiToken,
+        'Content-Type': 'application/json'
+      }
+    },
+    {
+      name: 'Authorization + API-Version',
+      headers: {
+        'Authorization': apiToken,
+        'Content-Type': 'application/json',
+        'API-Version': '2024-10'
+      }
+    },
+    {
+      name: 'Authorization + API-Version (2023-10)',
+      headers: {
+        'Authorization': apiToken,
+        'Content-Type': 'application/json',
+        'API-Version': '2023-10'
+      }
+    },
+    {
+      name: 'Query parameter',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      useQueryParam: true
+    }
+  ];
 
-    console.log('✓ Success!');
-    console.log('Response data:', JSON.stringify(response.data, null, 2));
-  } catch (error: any) {
-    console.log('✗ Failed');
-    if (axios.isAxiosError(error)) {
-      console.log('Status:', error.response?.status);
-      console.log('Status Text:', error.response?.statusText);
-      console.log('Error data:', JSON.stringify(error.response?.data, null, 2));
-    } else {
-      console.log('Error:', error.message);
+  for (const method of authMethods) {
+    try {
+      console.log(`\n--- Testing: ${method.name} ---`);
+
+      const url = method.useQueryParam ? `${apiUrl}?api_token=${apiToken}` : apiUrl;
+
+      const response = await axios.post(
+        url,
+        { query: meQuery },
+        { headers: method.headers }
+      );
+
+      console.log('✅ SUCCESS!');
+      console.log('Response:', JSON.stringify(response.data, null, 2));
+      console.log('\n🎉 Working authentication method found!');
+      return;
+    } catch (error: any) {
+      console.log('❌ Failed');
+      if (axios.isAxiosError(error)) {
+        console.log('   Status:', error.response?.status);
+        console.log('   Error:', error.response?.data || error.message);
+      } else {
+        console.log('   Error:', error.message);
+      }
     }
   }
 
-  // Test 2: Boards query with limit
-  const boardsQuery = `
-    query {
-      boards(limit: 5) {
-        id
-        name
-      }
-    }
-  `;
-
-  try {
-    console.log('\n--- Test 2: Boards Query (Limited) ---');
-    const response = await axios.post(
-      apiUrl,
-      { query: boardsQuery },
-      {
-        headers: {
-          'Authorization': apiToken,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    console.log('✓ Success!');
-    console.log('Response data:', JSON.stringify(response.data, null, 2));
-  } catch (error: any) {
-    console.log('✗ Failed');
-    if (axios.isAxiosError(error)) {
-      console.log('Status:', error.response?.status);
-      console.log('Status Text:', error.response?.statusText);
-      console.log('Error data:', JSON.stringify(error.response?.data, null, 2));
-    } else {
-      console.log('Error:', error.message);
-    }
-  }
+  console.log('\n❌ All authentication methods failed.');
 }
 
 testConnection();

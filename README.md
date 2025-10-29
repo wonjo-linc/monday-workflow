@@ -20,16 +20,21 @@ npm install
 
 ### API 토큰 발급
 
+⚠️ **중요**: 현재 제공된 토큰은 `me:write` 권한만 있어 보드 작업이 불가능합니다.
+
+**새 토큰 생성 방법:**
+
 1. Monday.com에 로그인
-2. 우측 상단 프로필 아이콘 클릭
-3. **Admin** > **API** 선택
-4. **API v2 Token** 섹션에서 새 토큰 생성
-5. 필요한 권한(Scopes) 선택:
-   - `boards:read` - 보드 읽기
-   - `boards:write` - 보드 생성 및 수정
-   - `workspaces:read` - 워크스페이스 읽기
-   - `users:read` - 사용자 정보 읽기
-6. 생성된 토큰 복사
+2. 우측 상단 프로필 아이콘 → **Admin** → **API** 선택
+3. **API v2 Token** 섹션에서 새 토큰 생성
+4. **필수 권한(Scopes) 선택:**
+   - ✅ `boards:read` - 보드 읽기
+   - ✅ `boards:write` - 보드 생성 및 수정
+   - ✅ `workspaces:read` - 워크스페이스 읽기
+   - ✅ `users:read` - 사용자 정보 읽기 (선택)
+5. 생성된 토큰 전체 복사
+
+📖 상세한 가이드는 [TOKEN_SETUP_GUIDE.md](./TOKEN_SETUP_GUIDE.md)를 참고하세요.
 
 ### 환경 변수 설정
 
@@ -40,11 +45,15 @@ MONDAY_API_TOKEN=your_api_token_here
 MONDAY_API_VERSION=2024-10
 ```
 
-### 연결 테스트
+### 토큰 확인
 
-API 토큰이 올바르게 설정되었는지 확인:
+API 토큰의 권한을 확인:
 
 ```bash
+# 토큰 디코딩 (권한 확인)
+npx tsx src/decode-token.ts
+
+# API 연결 테스트
 npx tsx src/test-connection.ts
 ```
 
