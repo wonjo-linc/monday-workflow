@@ -45,16 +45,19 @@ MONDAY_API_TOKEN=your_api_token_here
 MONDAY_API_VERSION=2024-10
 ```
 
-### 토큰 확인
+### 토큰 확인 및 테스트
 
-API 토큰의 권한을 확인:
+API 토큰의 권한을 확인하고 모든 기능을 테스트:
 
 ```bash
-# 토큰 디코딩 (권한 확인)
+# 1. 토큰 디코딩 (권한 확인)
 npx tsx src/decode-token.ts
 
-# API 연결 테스트
+# 2. API 연결 테스트 (다양한 인증 방식 시도)
 npx tsx src/test-connection.ts
+
+# 3. 전체 기능 종합 테스트 (권장)
+npx tsx src/test-all-features.ts
 ```
 
 ### 문제 해결
@@ -67,6 +70,18 @@ npx tsx src/test-connection.ts
 4. Monday.com 계정의 워크스페이스 접근 권한 확인
 
 ## 사용법
+
+### 테스트 실행
+
+```bash
+# 전체 기능 종합 테스트
+npm test
+
+# 또는 개별 테스트
+npm run test:token      # 토큰 권한 확인
+npm run test:connection # API 연결 테스트
+npm run test:all        # 모든 테스트 순차 실행
+```
 
 ### 개발 모드로 실행
 
@@ -94,9 +109,15 @@ monday-workflow/
 │   │   └── board-setup.ts         # 보드 구조 설정 워크플로우
 │   ├── types/
 │   │   └── monday.types.ts        # TypeScript 타입 정의
-│   └── index.ts                   # 메인 엔트리 포인트
+│   ├── index.ts                   # 메인 엔트리 포인트
+│   ├── test-connection.ts         # API 연결 테스트
+│   ├── decode-token.ts            # JWT 토큰 디코더
+│   └── test-all-features.ts       # 종합 기능 테스트
 ├── package.json
 ├── tsconfig.json
+├── README.md
+├── TOKEN_SETUP_GUIDE.md           # 토큰 설정 상세 가이드
+├── TEST_RESULTS.md                # 테스트 결과 리포트
 └── .env
 ```
 
